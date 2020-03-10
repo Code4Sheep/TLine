@@ -23,8 +23,10 @@ class Node:
     def isStrip(self):
         return self.strip
     def nodePrint(self):
-        return "p: " + str(self.pot) + ", r: " + str(self.res) + ", i: " + str(int(self.interface)) \
-               + ", s: " + str(int(self.strip))
+        return "p: " + str.format('{0:1.4f}', self.pot) + ", r: " + str.format('{0:1.4f}', self.res)
+        #return "p: " + str(self.pot) + ", r: " + str(self.res)
+        #return "p: " + str(self.pot) + ", r: " + str(self.res) + ", i: " + str(int(self.interface)) \
+        #       + ", s: " + str(int(self.strip))
 
 class customReturn:
     #custom return function returns a matrix and additonal value
@@ -50,13 +52,13 @@ def initNodeMatrix (wd,bd,aw,na,nb):
     b = float(d * bd)
 
     #just checking
-    print ("a: " + str(a) + " w: " + str(w) + " d: " + str(d) + " b: " + str(b))
+    print("a: " + str(a) + " w: " + str(w) + " d: " + str(d) + " b: " + str(b))
     #derive h and k values, usefull to check if a node is on the strip or not
     k = float(a/(na-1))
     h = float(b/(nb-1))
 
     #   calc where strip is relative to top left as well as calc how long the strip is in terms of nodes
-    #   note that both are inclusive!
+    #
     ind = float(b - d)
     interfaceY = math.floor(ind/h) + 1
     print("interface y: " + str(interfaceY))
@@ -99,8 +101,6 @@ def calcNode(mat, row, col, alpha, relaxation, Er):
     else:
         left = mat[row][col - 1]
 
-    ## DIDNT CHECK INTERFACE AM USING THE INTERFACE EQUATION!!!!!!!
-    ##fixed?
     if mat[row][col].isInterface():
         E = Er
     else:
@@ -111,6 +111,7 @@ def calcNode(mat, row, col, alpha, relaxation, Er):
     C = (2*alpha*alpha)/(1+E)
     D = top.getPot() + E*bottom.getPot()
 
+    #My way but not SOR way
     newPot = A * (B + C*D)
     #if (row == 3 and col == 0):
     #    print(str(A))
@@ -121,6 +122,9 @@ def calcNode(mat, row, col, alpha, relaxation, Er):
     oldPot = mat[row][col].getPot()
     Res = (newPot - oldPot) / relaxation
 
+    #implement sor algo
+    #Res = A * (B + C*D) - mat[row][col].getPot()
+    #newPot = mat[row][col].getPot() + relaxation*Res
 
     ret = Node(newPot, Res, mat[row][col].isInterface(), mat[row][col].isStrip())
     return ret
@@ -169,10 +173,10 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
 
     #sum bottom and top leg
     for col in range(0, rightoffset):
-        #print("nb-1 : " + str(mat[botoffset][col].getPot()) + " nb+1: " + str(mat[botoffset-2][col].getPot()))
-        tempbot = Er*(mat[botoffset][col].getPot() -
-                      mat[botoffset-2][col].getPot())
-        #print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
+        print("nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
+        tempbot = Er*(mat[botoffset+1][col].getPot() -
+                      mat[botoffset-1][col].getPot())
+        print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
         temptop = (mat[topoffset-1][col].getPot() -
                    mat[topoffset+1][col].getPot())
 
@@ -186,7 +190,7 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
 
     for row in range(topoffset,interfaceY+1):
 
-        #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
+        print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
         tempRT =(mat[row][rightoffset].getPot() -
                       mat[row][rightoffset-2].getPot())
         if (row == topoffset or row == interfaceY):
@@ -196,8 +200,8 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     #print("sumRT:" +str(Er) + ": " + str(sumRT))
 
     #print()
-    for row in range(interfaceY,botoffset):
-        #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset - 2].getPot()))
+    for row in range(interfaceY,botoffset+1):
+        print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset - 2].getPot()))
         tempRB =Er*(mat[row][rightoffset].getPot() -
                       mat[row][rightoffset-2].getPot())
         if (row == interfaceY or row == botoffset-1):

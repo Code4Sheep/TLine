@@ -28,7 +28,7 @@ itER = 0
 itAIR = 0
 #interface y is zero indexed but strip x isnt
 
-while resMax > pow(10, -5) and itER < 1000:
+while resMax > pow(10, -5) and itER < 10000:
     resMax = 0
     ret = reRoll(nodes, na, nb, resMax, alpha, relaxation, Er)
     nodesEr = ret.getMat()
@@ -42,13 +42,18 @@ grab = initNodeMatrix(wd, bd, aw, na, nb)
 nodes = grab.getMat()
 resMax = 100
 print("LOOK")
-while resMax > pow(10, -5) and itAIR < 1000:
+while resMax > pow(10, -5) and itAIR < 10000:
 #while itAIR < 6:
     resMax = 0
     ret = reRoll(nodes, na, nb, resMax, alpha, relaxation, 1)
     nodesAir = ret.getMat()
     resMax = ret.getAdditional1()
     itAIR = itAIR + 1
+    for x in range(0, nb):
+        temp = ""
+        for y in range(0, na):
+            temp = temp + " | " + nodesAir[x][y].nodePrint()
+        print(temp + " |")
 
 
 for x in range(0, nb):

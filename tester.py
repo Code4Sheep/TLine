@@ -15,3 +15,8 @@ for r in range(0, rows):
 for x in range (0,10):
     print(str(x))
 print
+
+val = 123.2421424124
+
+print(testt)
+print('hewwo %.4g' % val)
