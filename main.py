@@ -1,7 +1,7 @@
 from coolFuncs import Node, customReturn, reRoll, initNodeMatrix,contourCalc
 import math
 
-#
+#test for git
 wd = float(input("enter wd: "))
 bd = float(input("enter bd: "))
 aw = float(input("enter aw: "))
