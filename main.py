@@ -49,11 +49,7 @@ while resMax > pow(10, -5) and itAIR < 10000:
     nodesAir = ret.getMat()
     resMax = ret.getAdditional1()
     itAIR = itAIR + 1
-    for x in range(0, nb):
-        temp = ""
-        for y in range(0, na):
-            temp = temp + " | " + nodesAir[x][y].nodePrint()
-        print(temp + " |")
+
 
 
 for x in range(0, nb):

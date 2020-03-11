@@ -152,6 +152,8 @@ def reRoll(mat,na,nb,resMax, alpha , relaxation, Er):
 
 def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     sumtopbot = 0;
+    sumtop = 0;
+    sumbot = 0;
     sumRT = 0
     sumRB = 0
     offsetTop = 1
@@ -173,41 +175,49 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
 
     #sum bottom and top leg
     for col in range(0, rightoffset):
-        print("nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
+        #print("nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
         tempbot = Er*(mat[botoffset+1][col].getPot() -
                       mat[botoffset-1][col].getPot())
-        print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
+        #print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
         temptop = (mat[topoffset-1][col].getPot() -
                    mat[topoffset+1][col].getPot())
 
         if (col == 0 or col == rightoffset-1):
-            sumtopbot = sumtopbot + (1/4)*(temptop + tempbot)
-        else:
+            #print("term:" + str(col) + " , summing term: " + str(tempbot/4))
+            sumtop = sumtop + (1/2)*temptop
+            sumbot = sumbot + (1 / 2) * tempbot
             sumtopbot = sumtopbot + (1/2)*(temptop + tempbot)
+        else:
+            sumtop = sumtop + temptop
+            sumbot = sumbot + tempbot
+            sumtopbot = sumtopbot + (temptop + tempbot)
 
+    #print("sumbot: " + str(Er) + ": " + str(sumbot))
+    #print("sumtop: " + str(Er) + ": " + str(sumtop))
     #print("sumtopbot: "+ str(Er) + ": " + str(sumtopbot))
 
 
     for row in range(topoffset,interfaceY+1):
 
-        print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
+        #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
         tempRT =(mat[row][rightoffset].getPot() -
                       mat[row][rightoffset-2].getPot())
         if (row == topoffset or row == interfaceY):
-            sumRT = sumRT + (1/4)*tempRT
-        else:
+            #print("term:" + str(row) + " , summing term: " + str(tempRT/4))
             sumRT = sumRT + (1/2)*tempRT
+        else:
+            sumRT = sumRT + tempRT
     #print("sumRT:" +str(Er) + ": " + str(sumRT))
 
     #print()
     for row in range(interfaceY,botoffset+1):
-        print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset - 2].getPot()))
+        #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset - 2].getPot()))
         tempRB =Er*(mat[row][rightoffset].getPot() -
                       mat[row][rightoffset-2].getPot())
         if (row == interfaceY or row == botoffset-1):
-            sumRB = sumRB + (1/4)*tempRB
-        else:
             sumRB = sumRB + (1/2)*tempRB
+        else:
+            sumRB = sumRB + tempRB
     #print("sumRB:" + str(Er) + ": " + str(sumRB))
 
     negCEo = alpha*sumtopbot + (1/alpha)*(sumRT+sumRB)
