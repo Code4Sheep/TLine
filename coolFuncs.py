@@ -1,7 +1,8 @@
 import math
 import random
 
-
+#wonder why there is random +1's? Because interfacey assumed zero index while threshX doesnt!
+#why dont i fix this? I was already 90% done when i noticed!
 
 class Node:
     #   a representation of Nodes
@@ -159,19 +160,20 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     offsetTop = 1
     offsetBot = 1
     offsetRight = 1
-    #if interfaceY - 2 <= 0:
-    #    offsetTop = 1
-    #if interfaceY + 2 >= nb:
-    #    offsetBot = 1
-    #if stripthreshX + 2 >= na:
-    #    offsetRight = 1
+
+    #if interfaceY - 2 > 0:
+    #    offsetTop = 2
+    #if interfaceY + 2 < nb-1:
+    #    offsetBot = 2
+    #if stripthreshX  + 1  < na-1:
+    #    offsetRight = 2
 
     topoffset = interfaceY - offsetTop
     botoffset = interfaceY + offsetBot
     rightoffset = stripthreshX + offsetRight
-    #print(str(topoffset))
-    #print(str(botoffset))
-    #print(str(rightoffset))
+    print(str(topoffset))
+    print(str(botoffset))
+    print(str(rightoffset))
 
     #sum bottom and top leg
     for col in range(0, rightoffset):
