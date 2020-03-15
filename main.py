@@ -1,6 +1,8 @@
 from coolFuncs import Node, customReturn, reRoll, initNodeMatrix,contourCalc
 import math
-
+from mpl_toolkits.mplot3d import axes3d
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 
@@ -78,9 +80,21 @@ for row in range(0, nb):
 print("Air: " + str(itAIR))
 
 
+print(str(len(AirX)))
+print(str(len(AirY)))
+print(str(len(AirZ)))
 
+AirZ1D = np.array(AirZ)
 
+AirZ = [AirZ, AirZ]
 
+print(str(AirX))
+print(str(AirY))
+print(str(AirZ))
+
+AirXnp = np.array(AirX)
+AirYnp = np.array(AirY)
+AirZnp = np.array(AirZ)
 CEoAir = contourCalc(nodesAir,stripThreshX,interfaceY,na,nb,alpha,1)
 CEoEr = contourCalc(nodesEr,stripThreshX,interfaceY,na,nb,alpha,Er)
 
@@ -88,7 +102,19 @@ Eo = float(8.854*pow(10,-12))
 CAir = CEoAir*Eo*-1
 CEr = CEoEr*Eo*-1
 
+print(str(AirZnp))
 print("C/Eo air: " +str(CEoAir))
 print("C/Eo Er: " +str(CEoEr))
 print(str(CAir))
 print(str(CEr))
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection ='3d')
+ax.set_xlim(na,0)
+ax.set_ylim(nb,0)
+ax.set_xlabel('na')
+ax.set_ylabel('nb')
+ax.set_zlabel('pot')
+ax.plot_trisurf(AirXnp,AirYnp,AirZ1D)
+#ax.plot_wireframe(AirXnp,AirYnp,AirZnp,rstride=3,cstride=3)
+plt.show()
