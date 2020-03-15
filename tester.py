@@ -18,5 +18,10 @@ print
 
 val = 123.2421424124
 
-print(testt)
+
 print('hewwo %.4g' % val)
+
+
+testlist = []
+testlist.append(5)
+print(str(testlist))

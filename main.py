@@ -1,6 +1,9 @@
 from coolFuncs import Node, customReturn, reRoll, initNodeMatrix,contourCalc
 import math
 
+
+
+
 #test for git
 wd = float(input("enter wd: "))
 bd = float(input("enter bd: "))
@@ -51,21 +54,31 @@ while resMax > pow(10, -5) and itAIR < 10000:
     itAIR = itAIR + 1
 
 
+AirX = []
+AirY = []
+AirZ = []
 
-for x in range(0, nb):
+for row in range(0, nb):
     temp = ""
-    for y in range(0, na):
-        temp = temp + " | " + nodesEr[x][y].nodePrint()
+    for col in range(0, na):
+        temp = temp + " | " + nodesEr[row][col].nodePrint()
+
     print(temp + " |")
 print("ER: " + str(itER))
 
-for x in range(0, nb):
+for row in range(0, nb):
     temp = ""
-    for y in range(0, na):
-        temp = temp + " | " + nodesAir[x][y].nodePrint()
+    for col in range(0, na):
+        temp = temp + " | " + nodesAir[row][col].nodePrint()
+        AirX.append(col)
+        AirY.append(row)
+        AirZ.append(nodesAir[row][col].getPot())
     print(temp + " |")
 
 print("Air: " + str(itAIR))
+
+
+
 
 
 CEoAir = contourCalc(nodesAir,stripThreshX,interfaceY,na,nb,alpha,1)
