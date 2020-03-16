@@ -44,7 +44,6 @@ def initNodeMatrix (wd,bd,aw,na,nb):
     w = float(a / aw)
     d = float(w / wd)
     b = float(d * bd)
-
     #derive h and k values, usefull to check if a node is on the strip or not
     k = float(b/(nb-1))
     h = float(a/(na-1))

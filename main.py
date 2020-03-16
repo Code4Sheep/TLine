@@ -67,15 +67,15 @@ for row in range(0, nb):
         ErX.append(col)
         ErY.append(row)
         ErZ.append(nodesEr[row][col].getPot())
-print("Iterations (Er): " + str(itER))
 
 for row in range(0, nb):
     for col in range(0, na):
         AirX.append(col)
         AirY.append(row)
         AirZ.append(nodesAir[row][col].getPot())
-print("Iterations (Air): " + str(itAIR))
 
+print("Iterations (Air): " + str(itAIR))
+print("Iterations (Er): " + str(itER))
 
 CEoAir = contourCalc(nodesAir,stripThreshX,interfaceY,na,nb,alpha,1)
 CEoEr = contourCalc(nodesEr,stripThreshX,interfaceY,na,nb,alpha,Er)
@@ -99,7 +99,7 @@ if choice == 1 or choice == 3:
     ax1.set_ylim(nb,0)
     ax1.set_xlabel('na')
     ax1.set_ylabel('nb')
-    ax1.set_zlabel('pot')
+    ax1.set_zlabel('potential')
     ax1.plot_trisurf(AirXnp,AirYnp,AirZnp)
     plt.show()
 
@@ -116,6 +116,6 @@ if choice == 2 or choice == 3:
     ax2.set_ylim(nb, 0)
     ax2.set_xlabel('na')
     ax2.set_ylabel('nb')
-    ax2.set_zlabel('pot')
+    ax2.set_zlabel('potential')
     ax2.plot_trisurf(ErXnp, ErYnp, ErZnp)
     plt.show()
