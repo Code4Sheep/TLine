@@ -57,8 +57,6 @@ def initNodeMatrix (wd,bd,aw,na,nb):
     #derive h and k values, usefull to check if a node is on the strip or not
     k = float(a/(na-1))
     h = float(b/(nb-1))
-    print(str(h))
-    print(str(k))
 
     #   calc where strip is relative to top left as well as calc how long the strip is in terms of nodes
     #
@@ -92,6 +90,7 @@ def calcNode(mat, row, col, alpha, relaxation, Er):
 
     #   if the node is the strip then just pass over it
     if mat[row][col].isStrip():
+        print(str(row) + " " + str(col) + " skip ")
         return mat[row][col]
 
     top = mat[row - 1][col]
@@ -109,9 +108,11 @@ def calcNode(mat, row, col, alpha, relaxation, Er):
     else:
         E = 1
 
-    A = 1 / (2 * (1 + (alpha*alpha) ))
+    #print(str(row) + " " +str(col) + " - " + str(mat[row][col].isInterface()) + " Er to use " + str(E))
+    a2 = float(alpha*alpha)
+    A = 1 / (2 * (1 + a2))
     B = left.getPot() + right.getPot()
-    C = (2*alpha*alpha)/(1+E)
+    C = (2*a2)/(1+E)
     D = top.getPot() + E*bottom.getPot()
 
     #My way but not SOR way
@@ -180,15 +181,15 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     #sum bottom and top leg
     #print("topbot")
     for col in range(0, rightoffset):
-        print("nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
+        #print("nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
         tempbot = Er*(mat[botoffset+1][col].getPot() -
                       mat[botoffset-1][col].getPot())
-        print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
+        #print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
         temptop = (mat[topoffset-1][col].getPot() -
                    mat[topoffset+1][col].getPot())
 
         if (col == 0 or col == rightoffset-1):
-            print("term:" + str(col) + " , summing term: " + str(tempbot/4))
+            #print("term:" + str(col) + " , summing term: " + str(tempbot/4))
             sumtop = sumtop + (1/2)*temptop
             sumbot = sumbot + (1 / 2) * tempbot
             sumtopbot = sumtopbot + (1/2)*(temptop + tempbot)
@@ -210,7 +211,7 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     #print("right top")
     for row in range(topoffset,interfaceY+1):
 
-        print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
+        #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
         tempRT = (mat[row][rightoffset].getPot() -
                       mat[row][rightoffset-2].getPot())
         if (row == topoffset or row == interfaceY):
