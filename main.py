@@ -60,21 +60,21 @@ AirY = []
 AirZ = []
 
 for row in range(0, nb):
-#    temp = ""
+    temp = ""
     for col in range(0, na):
         pass
-#        temp = temp + " | " + nodesEr[row][col].nodePrint()
-#    print(temp + " |")
+        temp = temp + " | " + nodesEr[row][col].nodePrint()
+    print(temp + " |")
 print("ER: " + str(itER))
 
 for row in range(0, nb):
-#    temp = ""
+    temp = ""
     for col in range(0, na):
-#        temp = temp + " | " + nodesAir[row][col].nodePrint()
+        temp = temp + " | " + nodesAir[row][col].nodePrint()
         AirX.append(col)
         AirY.append(row)
         AirZ.append(nodesAir[row][col].getPot())
-#    print(temp + " |")
+    print(temp + " |")
 
 print("Air: " + str(itAIR))
 
@@ -94,18 +94,21 @@ AirZ = [AirZ, AirZ]
 AirXnp = np.array(AirX)
 AirYnp = np.array(AirY)
 AirZnp = np.array(AirZ)
+
 CEoAir = contourCalc(nodesAir,stripThreshX,interfaceY,na,nb,alpha,1)
 CEoEr = contourCalc(nodesEr,stripThreshX,interfaceY,na,nb,alpha,Er)
-
-Eo = float(8.854*pow(10,-12))
+Eo = float(pow(10, -9)/(36*math.pi))
 CAir = CEoAir*Eo*-1
 CEr = CEoEr*Eo*-1
-
 #print(str(AirZnp))
 print("C/Eo air: " +str(CEoAir))
 print("C/Eo Er: " +str(CEoEr))
 print(str(CAir))
 print(str(CEr))
+
+
+
+
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection ='3d')

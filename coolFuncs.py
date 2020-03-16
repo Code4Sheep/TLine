@@ -24,7 +24,7 @@ class Node:
     def isStrip(self):
         return self.strip
     def nodePrint(self):
-        return "p: " + str.format('{0:1.4f}', self.pot) + ", r: " + str.format('{0:1.4f}', self.res)
+        return "p: " + str.format('{0:1.4f}', self.pot) + ", r: " + str.format('{0:1.4f}', math.fabs(self.res)) + ", i: " + str.format('{0:1.1f}',int(self.interface))
         #return "p: " + str(self.pot) + ", r: " + str(self.res)
         #return "p: " + str(self.pot) + ", r: " + str(self.res) + ", i: " + str(int(self.interface)) \
         #       + ", s: " + str(int(self.strip))
@@ -57,6 +57,8 @@ def initNodeMatrix (wd,bd,aw,na,nb):
     #derive h and k values, usefull to check if a node is on the strip or not
     k = float(a/(na-1))
     h = float(b/(nb-1))
+    print(str(h))
+    print(str(k))
 
     #   calc where strip is relative to top left as well as calc how long the strip is in terms of nodes
     #
@@ -176,56 +178,68 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     #print(str(rightoffset))
 
     #sum bottom and top leg
+    #print("topbot")
     for col in range(0, rightoffset):
-        #print("nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
+        print("nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
         tempbot = Er*(mat[botoffset+1][col].getPot() -
                       mat[botoffset-1][col].getPot())
-        #print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
+        print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
         temptop = (mat[topoffset-1][col].getPot() -
                    mat[topoffset+1][col].getPot())
 
         if (col == 0 or col == rightoffset-1):
-            #print("term:" + str(col) + " , summing term: " + str(tempbot/4))
+            print("term:" + str(col) + " , summing term: " + str(tempbot/4))
             sumtop = sumtop + (1/2)*temptop
             sumbot = sumbot + (1 / 2) * tempbot
             sumtopbot = sumtopbot + (1/2)*(temptop + tempbot)
+            #print("div by 2")
         else:
             sumtop = sumtop + temptop
             sumbot = sumbot + tempbot
             sumtopbot = sumtopbot + (temptop + tempbot)
+            #print("no div")
+
+
+
 
     #print("sumbot: " + str(Er) + ": " + str(sumbot))
     #print("sumtop: " + str(Er) + ": " + str(sumtop))
     #print("sumtopbot: "+ str(Er) + ": " + str(sumtopbot))
 
 
+    #print("right top")
     for row in range(topoffset,interfaceY+1):
 
-        #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
-        tempRT =(mat[row][rightoffset].getPot() -
+        print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
+        tempRT = (mat[row][rightoffset].getPot() -
                       mat[row][rightoffset-2].getPot())
         if (row == topoffset or row == interfaceY):
             #print("term:" + str(row) + " , summing term: " + str(tempRT/4))
             sumRT = sumRT + (1/2)*tempRT
+            #print("div by 2")
         else:
             sumRT = sumRT + tempRT
+            #print("no div")
     #print("sumRT:" +str(Er) + ": " + str(sumRT))
 
-    #print()
+    #print("right bot")
     for row in range(interfaceY,botoffset+1):
         #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset - 2].getPot()))
         tempRB =Er*(mat[row][rightoffset].getPot() -
                       mat[row][rightoffset-2].getPot())
-        if (row == interfaceY or row == botoffset-1):
+        if (row == interfaceY or row == botoffset):
             sumRB = sumRB + (1/2)*tempRB
+            #print("div by 2")
         else:
             sumRB = sumRB + tempRB
+            #print("no div")
     #print("sumRB:" + str(Er) + ": " + str(sumRB))
 
+    print(str(sumtopbot) + " " + str(sumRT+sumRB))
     negCEo = alpha*sumtopbot + (1/alpha)*(sumRT+sumRB)
+    print()
 
     return negCEo
-
 
 
 
