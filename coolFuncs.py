@@ -1,8 +1,7 @@
 import math
 import random
 
-#wonder why there is random +1's? Because interfacey assumed zero index while threshX doesnt!
-#why dont i fix this? I was already 90% done when i noticed!
+
 
 class Node:
     #   a representation of Nodes
@@ -55,15 +54,15 @@ def initNodeMatrix (wd,bd,aw,na,nb):
     #just checking
     print("a: " + str(a) + " w: " + str(w) + " d: " + str(d) + " b: " + str(b))
     #derive h and k values, usefull to check if a node is on the strip or not
-    k = float(a/(na-1))
-    h = float(b/(nb-1))
+    k = float(b/(nb-1))
+    h = float(a/(na-1))
 
     #   calc where strip is relative to top left as well as calc how long the strip is in terms of nodes
     #
     ind = float(b - d)
-    interfaceY = math.floor(ind/h) + 1
+    interfaceY = math.floor(ind/k)
     print("interface y: " + str(interfaceY))
-    stripThreshX = math.floor(w/k) + 1
+    stripThreshX = math.floor(w/h)
     print("strip x: " + str(stripThreshX))
     #   generate matrix skeleton
     nodes = [[Node(0, 0, False, False) for j in range(na)] for i in range(nb)]
@@ -71,7 +70,7 @@ def initNodeMatrix (wd,bd,aw,na,nb):
 
     #   apply values to special cases, strip and
     for x in range(0, na):
-        if x < stripThreshX:
+        if x <= stripThreshX:
             nodes[interfaceY][x] = Node(1, 0, True, True)
         else:
             nodes[interfaceY][x] = Node(0, 0, True, False)
@@ -90,7 +89,7 @@ def calcNode(mat, row, col, alpha, relaxation, Er):
 
     #   if the node is the strip then just pass over it
     if mat[row][col].isStrip():
-        print(str(row) + " " + str(col) + " skip ")
+
         return mat[row][col]
 
     top = mat[row - 1][col]
@@ -179,16 +178,16 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     #print(str(rightoffset))
 
     #sum bottom and top leg
-    #print("topbot")
-    for col in range(0, rightoffset):
-        #print("nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
+    print("topbot")
+    for col in range(0, rightoffset+1):
+        #print("bot: nb-1 : " + str(mat[botoffset+1][col].getPot()) + " nb+1: " + str(mat[botoffset-1][col].getPot()))
         tempbot = Er*(mat[botoffset+1][col].getPot() -
                       mat[botoffset-1][col].getPot())
-        #print("na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
+        #print("top: na+1 : " + str(mat[topoffset-1][col].getPot()) + " na-1: " + str(mat[topoffset+1][col].getPot()))
         temptop = (mat[topoffset-1][col].getPot() -
                    mat[topoffset+1][col].getPot())
 
-        if (col == 0 or col == rightoffset-1):
+        if (col == 0 or col == rightoffset):
             #print("term:" + str(col) + " , summing term: " + str(tempbot/4))
             sumtop = sumtop + (1/2)*temptop
             sumbot = sumbot + (1 / 2) * tempbot
@@ -211,9 +210,9 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     #print("right top")
     for row in range(topoffset,interfaceY+1):
 
-        #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
-        tempRT = (mat[row][rightoffset].getPot() -
-                      mat[row][rightoffset-2].getPot())
+        #print("right top: mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset-2].getPot()))
+        tempRT = (mat[row][rightoffset+1].getPot() -
+                      mat[row][rightoffset-1].getPot())
         if (row == topoffset or row == interfaceY):
             #print("term:" + str(row) + " , summing term: " + str(tempRT/4))
             sumRT = sumRT + (1/2)*tempRT
@@ -225,9 +224,9 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
 
     #print("right bot")
     for row in range(interfaceY,botoffset+1):
-        #print("mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset - 2].getPot()))
-        tempRB =Er*(mat[row][rightoffset].getPot() -
-                      mat[row][rightoffset-2].getPot())
+        #print("right bot: mr+1 : " + str(mat[row][rightoffset].getPot()) + " mr-1: " + str(mat[row][rightoffset - 2].getPot()))
+        tempRB =Er*(mat[row][rightoffset+1].getPot() -
+                      mat[row][rightoffset-1].getPot())
         if (row == interfaceY or row == botoffset):
             sumRB = sumRB + (1/2)*tempRB
             #print("div by 2")

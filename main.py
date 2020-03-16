@@ -13,9 +13,9 @@ aw = float(input("enter aw: "))
 na = int(input("enter na: "))
 nb = int(input("enter nb: "))
 Er = float(input("enter Er: "))
-customRelax = str(input("custom relaxation parameter? (True/False): "))
-print(customRelax)
-if customRelax == "True":
+customRelax = str(input("custom relaxation parameter? (T/F): "))
+gr = str(input("3D graph? (T/F): "))
+if customRelax == "T":
     relaxation = float(input("enter relaxation: "))
 else:
     relaxation = 2 * (1 - (math.pi / math.sqrt(2)) * math.sqrt((1 / math.pow(na, 2)) + (1 / math.pow(nb, 2))))
@@ -39,8 +39,8 @@ while resMax > pow(10, -5) and itER < 1000:
     nodesEr = ret.getMat()
     resMax = ret.getAdditional1()
     itER = itER + 1
-    #if (itER % 100 == 0):
-    #    print(str(itER))
+    if (itER % 100 == 0):
+        print("* ", end="")
     #    print("resMax: " + str(resMax))
 
 grab = initNodeMatrix(wd, bd, aw, na, nb)
@@ -79,22 +79,6 @@ for row in range(0, nb):
 print("Air: " + str(itAIR))
 
 
-#print(str(len(AirX)))
-#print(str(len(AirY)))
-#print(str(len(AirZ)))
-
-AirZ1D = np.array(AirZ)
-
-AirZ = [AirZ, AirZ]
-
-#print(str(AirX))
-#print(str(AirY))
-#print(str(AirZ))
-
-AirXnp = np.array(AirX)
-AirYnp = np.array(AirY)
-AirZnp = np.array(AirZ)
-
 CEoAir = contourCalc(nodesAir,stripThreshX,interfaceY,na,nb,alpha,1)
 CEoEr = contourCalc(nodesEr,stripThreshX,interfaceY,na,nb,alpha,Er)
 Eo = float(pow(10, -9)/(36*math.pi))
@@ -106,16 +90,18 @@ print("C/Eo Er: " +str(CEoEr))
 print(str(CAir))
 print(str(CEr))
 
-
-
-
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection ='3d')
-ax.set_xlim(na,0)
-ax.set_ylim(nb,0)
-ax.set_xlabel('na')
-ax.set_ylabel('nb')
-ax.set_zlabel('pot')
-ax.plot_trisurf(AirXnp,AirYnp,AirZ1D)
-plt.show()
+if gr == "T":
+    AirZ1D = np.array(AirZ)
+    AirZ = [AirZ, AirZ]
+    AirXnp = np.array(AirX)
+    AirYnp = np.array(AirY)
+    AirZnp = np.array(AirZ)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection ='3d')
+    ax.set_xlim(na,0)
+    ax.set_ylim(nb,0)
+    ax.set_xlabel('na')
+    ax.set_ylabel('nb')
+    ax.set_zlabel('pot')
+    ax.plot_trisurf(AirXnp,AirYnp,AirZ1D)
+    plt.show()
