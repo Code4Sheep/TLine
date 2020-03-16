@@ -33,22 +33,21 @@ itER = 0
 itAIR = 0
 #interface y is zero indexed but strip x isnt
 
-while resMax > pow(10, -5) and itER < 10000:
+while resMax > pow(10, -5) and itER < 1000:
     resMax = 0
     ret = reRoll(nodes, na, nb, resMax, alpha, relaxation, Er)
     nodesEr = ret.getMat()
     resMax = ret.getAdditional1()
     itER = itER + 1
-    if (itER % 100 == 0):
-        print(str(itER))
-        print("resMax: " + str(resMax))
+    #if (itER % 100 == 0):
+    #    print(str(itER))
+    #    print("resMax: " + str(resMax))
 
 grab = initNodeMatrix(wd, bd, aw, na, nb)
 nodes = grab.getMat()
 resMax = 100
-print("LOOK")
-while resMax > pow(10, -5) and itAIR < 10000:
-#while itAIR < 6:
+
+while resMax > pow(10, -5) and itAIR < 1000:
     resMax = 0
     ret = reRoll(nodes, na, nb, resMax, alpha, relaxation, 1)
     nodesAir = ret.getMat()
@@ -61,36 +60,36 @@ AirY = []
 AirZ = []
 
 for row in range(0, nb):
-    temp = ""
+#    temp = ""
     for col in range(0, na):
-        temp = temp + " | " + nodesEr[row][col].nodePrint()
-
-    print(temp + " |")
+        pass
+#        temp = temp + " | " + nodesEr[row][col].nodePrint()
+#    print(temp + " |")
 print("ER: " + str(itER))
 
 for row in range(0, nb):
-    temp = ""
+#    temp = ""
     for col in range(0, na):
-        temp = temp + " | " + nodesAir[row][col].nodePrint()
+#        temp = temp + " | " + nodesAir[row][col].nodePrint()
         AirX.append(col)
         AirY.append(row)
         AirZ.append(nodesAir[row][col].getPot())
-    print(temp + " |")
+#    print(temp + " |")
 
 print("Air: " + str(itAIR))
 
 
-print(str(len(AirX)))
-print(str(len(AirY)))
-print(str(len(AirZ)))
+#print(str(len(AirX)))
+#print(str(len(AirY)))
+#print(str(len(AirZ)))
 
 AirZ1D = np.array(AirZ)
 
 AirZ = [AirZ, AirZ]
 
-print(str(AirX))
-print(str(AirY))
-print(str(AirZ))
+#print(str(AirX))
+#print(str(AirY))
+#print(str(AirZ))
 
 AirXnp = np.array(AirX)
 AirYnp = np.array(AirY)
@@ -102,7 +101,7 @@ Eo = float(8.854*pow(10,-12))
 CAir = CEoAir*Eo*-1
 CEr = CEoEr*Eo*-1
 
-print(str(AirZnp))
+#print(str(AirZnp))
 print("C/Eo air: " +str(CEoAir))
 print("C/Eo Er: " +str(CEoEr))
 print(str(CAir))
@@ -116,5 +115,4 @@ ax.set_xlabel('na')
 ax.set_ylabel('nb')
 ax.set_zlabel('pot')
 ax.plot_trisurf(AirXnp,AirYnp,AirZ1D)
-#ax.plot_wireframe(AirXnp,AirYnp,AirZnp,rstride=3,cstride=3)
 plt.show()

@@ -113,19 +113,19 @@ def calcNode(mat, row, col, alpha, relaxation, Er):
     D = top.getPot() + E*bottom.getPot()
 
     #My way but not SOR way
-    newPot = A * (B + C*D)
+    #newPot = A * (B + C*D)
     #if (row == 3 and col == 0):
     #    print(str(A))
     #    print(str(B))
     #    print(str(C))
     #    print(str(D))
     #    print(str(newPot))
-    oldPot = mat[row][col].getPot()
-    Res = (newPot - oldPot) / relaxation
+    #oldPot = mat[row][col].getPot()
+    #Res = (newPot - oldPot) / relaxation
 
     #implement sor algo
-    #Res = A * (B + C*D) - mat[row][col].getPot()
-    #newPot = mat[row][col].getPot() + relaxation*Res
+    Res = A * (B + C*D) - mat[row][col].getPot()
+    newPot = mat[row][col].getPot() + relaxation*Res
 
     ret = Node(newPot, Res, mat[row][col].isInterface(), mat[row][col].isStrip())
     return ret
@@ -171,9 +171,9 @@ def contourCalc(mat,stripthreshX,interfaceY,na,nb,alpha,Er):
     topoffset = interfaceY - offsetTop
     botoffset = interfaceY + offsetBot
     rightoffset = stripthreshX + offsetRight
-    print(str(topoffset))
-    print(str(botoffset))
-    print(str(rightoffset))
+    #print(str(topoffset))
+    #print(str(botoffset))
+    #print(str(rightoffset))
 
     #sum bottom and top leg
     for col in range(0, rightoffset):
