@@ -11,6 +11,10 @@ na = int(input("enter na: "))
 nb = int(input("enter nb: "))
 Er = float(input("enter Er: "))
 customRelax = str(input("custom relaxation parameter? (T/F): "))
+if customRelax == "T":
+    relaxation = float(input("enter relaxation: "))
+else:
+    relaxation = 2 * (1 - (math.pi / math.sqrt(2)) * math.sqrt((1 / math.pow(na, 2)) + (1 / math.pow(nb, 2))))
 gr = str(input("3D graph? (T/F): "))
 if gr == "T":
     print("1 for Air Line")
@@ -19,10 +23,6 @@ if gr == "T":
     choice = int(input())
 else:
     choice = 0
-if customRelax == "T":
-    relaxation = float(input("enter relaxation: "))
-else:
-    relaxation = 2 * (1 - (math.pi / math.sqrt(2)) * math.sqrt((1 / math.pow(na, 2)) + (1 / math.pow(nb, 2))))
 grab = initNodeMatrix(wd,bd,aw,na,nb)
 nodes = grab.getMat()
 alpha = grab.getAdditional1()
