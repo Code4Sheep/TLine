@@ -1,3 +1,3 @@
 # TLine
-Solves microstrip problems with realtive ease.
+Solves microstrip problems with relative ease.
 Considers the trace to be  infinitesimally thin
